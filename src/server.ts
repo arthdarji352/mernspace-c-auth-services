@@ -1,17 +1,20 @@
 import app from "./app";
 import { Config } from "./config";
+import logger from "./config/logger";
 
 const startServer = () => {
     const PORT = Config.PORT;
     try {
         app.listen(PORT, () => {
-            // eslint-disable-next-line no-console
-            console.log(`Listing on port ${PORT}`);
+            logger.info(`Listing on port ${PORT}`);
         });
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
-        process.exit(1);
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            logger.error(err.message);
+            setTimeout(() => {
+                process.exit(1);
+            }, 1000);
+        }
     }
 };
 
